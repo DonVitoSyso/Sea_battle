@@ -2,25 +2,22 @@ import random
 
 class Dot:
     def __init__(self, x=None, y=None, val='.'):
-        self.x = y
-        self.y = x
-        self.val = val
+        self.x = x
+        self.y = y
 
     def __eq__(self, other):
-        return True if self.dot == other.dot else False
-
-    def set_Dot(self, x, y):
-        self.dot = [x, y]
+        return True if self.x == other.x and self.y == other.y else False
 
     def get_Dot(self):
-        return f'x:{self.x} y:{self.y} - val:{self.val}'
+        return f'Dot - x:{self.x} y:{self.y}'
 
 class Ship():
-    def __init__(self, length=None, x=None, y=None, orientation='', life=None):
+    def __init__(self, ship_bow, length=None, orientation=''):
         self.length = length
-        self.ship = Dot(x, y)
+        # нос коробля калсса Dot(x, y)
+        self.ship_bow = ship_bow
         self.orientation = orientation
-        self.life = life
+        self.lives = length
 
     def get_Ship(self):
         return f'Ship have length: {self.length} and his position ({self.ship.dot[0]}, {self.ship.dot[1]})'
@@ -38,34 +35,34 @@ class Ship():
         return dots_
 
 class Board():
-    def __init__(self, ships=Ship(), hid=False, ships_life=0):
-        self.board_ = [[Dot() for _ in range(6)] for _ in range(6)]
-        # self.board_ = [Dot() for _ in range(6)]
-        # for j in range(6):
-        #     self.board_[j] = [Dot() for _ in range(6)]
-        # self.board_ = [[Dot(0, 0)]*6 for _ in range(36)]
-        self.ships = ships
+    def __init__(self, hid=False, size = 6):
+        self.board_ = [["o" for _ in range(size)] for _ in range(size)]
+        self.ships = []
         self.hid = hid
-        self.ships_life = ships_life
+        self.size = size
+        self.count = 0
+        # этот тип непонятен
+        self.busy = []
 
-    def add_ship(self):
-        i = 6
-        while i > 0:
-            i -= 1
+    def add_ship(self, length=2):
+        i = 30
+        ship_tmp = Ship()
+        while i:
             # генераторы случайных расположений
             ornt = random.choice("HV")
-            x = random.randint(0, 5)
-            y = random.randint(0, 5)
+            x = random.randint(0, 5) if ornt == 'H' else random.randint(0, 5-length)
+            y = random.randint(0, 5-length) if ornt == 'H' else random.randint(0, 5)
             # генераторы случайных расположений
-            length = self.ships.length
-            ship = Ship(length, x, y, ornt, length)
+            ship = Ship(length, x, y, ornt)
             # сохраняем корабль на доску
             for j in range(len(ship.dots())):
-                self.board_[ship.dots()[j].x - 1][ship.dots()[j].y - 1].val = ship.dots()[j].val
+                if self.board_[ship.dots()[j].x][ship.dots()[j].y].val == '.':
+                    self.board_[ship.dots()[j].x][ship.dots()[j].y].val = ship.dots()[j].val
+                else:
+                    i -= 1
+                    break
+        return i
                 # print(ship.dots()[j].val, ship.dots()[j].x, ship.dots()[j].y)
-            # for i in range(0, length):
-            #     self.board_ = [Dot(x, y, '+')]
-
 
     def contour(self):
         ...
@@ -86,7 +83,7 @@ class Board():
             print()
 
     def out(self, dot):
-        return False if 0 < dot.x < 6 and 0 < dot.y < 6 else True
+        return False if 0 <= dot.x < 6 and 0 <= dot.y < 6 else True
 
     def shot(self):
         ...
@@ -131,7 +128,7 @@ class Game(Player):
 
 board_test = [[] for _ in range(0, 6)]
 print(board_test)
-ship = Ship(3, 2, 3, "V", 3)
+ship = Ship(3, 2, 3, "V")
 
 #print(ship.get_Ship(), ship.get_Dot())
 #print(*ship.dots())
@@ -140,8 +137,30 @@ print(board.ships.ship.get_Dot())
 # print(board.board_)
 # board.show()
 board.show()
-board.add_ship()
+ship_list = [1, 2, 2, 1, 1, 1, 1]
+for s in ship_list:
+    print(board.add_ship(s))
 board.show()
+
+list_1 = [Dot(y, x) for x, y in zip(range(4), range(4))]
+print(list_1)
+for i in range(4):
+    for j in range(4):
+        ...
+        # print(list_1[i][j].x, list_1[i][j].y, list_1[i][j].val)
+list_2 = [Dot(0,0), Dot(1,1), Dot(1,2)]
+# for x in list_2:
+#     for y in list_1:
+#         for z in y:
+#             if x == z:
+#                 print("Проверка прошла!", y)
+
+# print(list(filter(lambda i: i in list_2, list_2)))
+if all(x in list_1 for x in list_2):
+    print("Проверка прошла!")
+else:
+    print(False)
+
 
 # сама игра начинатся здесь
 game = Game
