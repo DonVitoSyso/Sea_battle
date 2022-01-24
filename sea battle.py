@@ -14,6 +14,7 @@ class BoardUsedException(BoardException):
 class BoardWrongShipException(BoardException):
     ...
 
+# класс написан полностью, точки
 class Dot:
     def __init__(self, x=None, y=None, val='.'):
         self.x = x
@@ -25,6 +26,7 @@ class Dot:
     def get_Dot(self):
         return f'Dot - x:{self.x} y:{self.y}'
 
+# класс написан полностью, карабль
 class Ship():
     def __init__(self, ship_bow, length=None, orientation=''):
         self.length = length
@@ -48,10 +50,11 @@ class Ship():
                 dots_.append(Dot(self.ship_bow.x, self.ship_bow.y + v, '+'))
             # dots_ = Dot((self.ship.dot[0], self.ship.dot[1] + v, '+') for v in range(0, self.length))
         return dots_
-    # эту часть еще не разбирал!!!!!!
-    # def shooten(self, shot):
-    #     return shot in self.dots
+    # проверка поподания выстрела в точки коробля
+    def shooten(self, shot):
+        return shot in self.dots
 
+# класс написан полностью, БЕЗ ОПИСАНИЯ ВЫСТРЕЛОВ
 class Board():
     def __init__(self, hid=False, size=6):
         self.board_ = [["o" for _ in range(size)] for _ in range(size)]
@@ -62,28 +65,42 @@ class Board():
         # этот тип непонятен
         self.busy = []
 
+    def begin(self):
+        self.busy = []
 
     def out(self, dot):
         return False if 0 <= dot.x < 6 and 0 <= dot.y < 6 else True
-
+    # зделан полностью, и контур тоже
     def add_ship(self, ship):
-        # генераторы случайных расположений
-        ornt = random.choice("HV")
-        dot = Dot()
-        dot.x = random.randint(0, 5) if ornt == 'H' else random.randint(0, 5 - length)
-        dot.y = random.randint(0, 5 - length) if ornt == 'H' else random.randint(0, 5)
-        # генераторы случайных расположений
+        # # генераторы случайных расположений
+        # ornt = random.choice("HV")
+        # dot = Dot()
+        # dot.x = random.randint(0, 5) if ornt == 'H' else random.randint(0, 5 - length)
+        # dot.y = random.randint(0, 5 - length) if ornt == 'H' else random.randint(0, 5)
+        # # генераторы случайных расположений
         # сохраняеv корабль на доску
         for i in ship.dots:
             if self.out(i) or i in self.busy:
-                return BoardWrongShipException()
-            else:
-                ...
-        return i
-                # print(ship.dots()[j].val, ship.dots()[j].x, ship.dots()[j].y)
-
-    def contour(self):
-        ...
+                raise BoardWrongShipException()
+        for i in ship.dots:
+            self.board_[i.x][i.y] = "■"
+            self.busy.append(i)
+        self.ships.append(ship)
+        self.contour(ship)
+    # полностью скопирован из вэб
+    def contour(self, ship, verb=False):
+        near = [
+            (-1, -1), (-1, 0), (-1, 1),
+            (0, -1), (0, 0), (0, 1),
+            (1, -1), (1, 0), (1, 1)
+        ]
+        for d in ship.dots:
+            for dx, dy in near:
+                cur = Dot(d.x + dx, d.y + dy)
+                if not (self.out(cur)) and cur not in self.busy:
+                    if verb:
+                        self.board_[cur.x][cur.y] = "."
+                    self.busy.append(cur)
 
     def show(self):
         # print("   | 1 | 2 | 3 | 4 | 5 | 6 |")
@@ -105,8 +122,8 @@ class Board():
 
 class Player(Board):
     def __init__(self, board_player1, board_player2):
-        self.board_player1 = Ship(board_player1)
-        self.board_player2 = Ship(board_player2)
+        self.board_player1 = board_player1
+        self.board_player2 = board_player2
 
     def ask(self):
         raise NotImplementedError()
