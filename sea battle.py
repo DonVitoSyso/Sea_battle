@@ -61,8 +61,9 @@ class Board():
         self.ships = []
         self.hid = hid
         self.size = size
+        # колличество параженных короблей
         self.count = 0
-        # этот тип непонятен
+        # количество занятых точек
         self.busy = []
 
     def begin(self):
@@ -110,12 +111,19 @@ class Board():
         #     for j in range(0, 6):
         #         print(f' {self.board_[j].dot[0]} ', end='|')
         #     print('\n---+---+---+---+---+---+---+')
-        print("    1  2  3  4  5  6 ")
-        for i in range(0, 6):
-            print(f' {i + 1} ', end='')
-            for j in range(0, 6):
-                print(f' {self.board_[i][j].val} ', end='')
-            print()
+        res = ""
+        res += "    1  2  3  4  5  6"
+        # for i in range(0, 6):
+        #     res += f" {i + 1} "
+        #     for j in range(0, 6):
+        #         res += f" {self.board_[i][j]} "
+        #     res += "\n"
+        for i, j in enumerate(self.board_):
+            res += f"\n {i+1}  " + "  ".join(j)
+        # Разобраться надо!!!
+        if self.hid:
+            res = res.replace("■", "o")
+        return res
 
     def shot(self):
         ...
@@ -207,11 +215,11 @@ ship = Ship(3, dot_, "V")
 
 #print(ship.get_Ship(), ship.get_Dot())
 #print(*ship.dots())
-board = Board(ship, True, 1)
-print(board.ships.ship.get_Dot())
+board = Board()
+# print(board.ships.ship.get_Dot())
 # print(board.board_)
 # board.show()
-board.show()
+print(board.show())
 ship_list = [1, 2, 2, 1, 1, 1, 1]
 for s in ship_list:
     print(board.add_ship(s))
