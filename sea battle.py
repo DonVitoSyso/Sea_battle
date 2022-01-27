@@ -43,11 +43,11 @@ class Ship():
         dots_ = []
         if self.orientation == "H":
             for h in range(self.length):
-                dots_.append(Dot(self.ship_bow.x + h, self.ship_bow.y, '+'))
+                dots_.append(Dot(self.ship_bow.x, self.ship_bow.y + h, '+'))
             # dots_.append(list(Dot(self.ship.x + h, self.ship.y, '+')) for h in range(0, self.length))
         elif self.orientation == "V":
             for v in range(self.length):
-                dots_.append(Dot(self.ship_bow.x, self.ship_bow.y + v, '+'))
+                dots_.append(Dot(self.ship_bow.x + v, self.ship_bow.y, '+'))
             # dots_ = Dot((self.ship.dot[0], self.ship.dot[1] + v, '+') for v in range(0, self.length))
         return dots_
     # проверка поподания выстрела в точки коробля
@@ -88,7 +88,7 @@ class Board():
             self.busy.append(i)
         self.ships.append(ship)
         self.contour(ship)
-    # полностью скопирован из вэб
+    # полностью скопирован из вэб + разобрался
     def contour(self, ship, verb=False):
         near = [
             (-1, -1), (-1, 0), (-1, 1),
@@ -210,12 +210,15 @@ class Game(Player):
 board_test = [[] for _ in range(0, 6)]
 print(board_test)
 print(len(board_test))
-dot_ = Dot(2, 3)
-ship = Ship(3, dot_, "V")
+dot_ = Dot(1, 2)
+ship = Ship(dot_, 4, "V")
+ship2 = Ship(Dot(0,0), 2, "V")
 
 #print(ship.get_Ship(), ship.get_Dot())
 #print(*ship.dots())
 board = Board()
+board.add_ship(ship)
+board.add_ship(ship2)
 # print(board.ships.ship.get_Dot())
 # print(board.board_)
 # board.show()
