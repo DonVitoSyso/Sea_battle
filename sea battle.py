@@ -104,20 +104,9 @@ class Board():
                     self.busy.append(cur)
     # мой метод
     def show(self):
-        # print("   | 1 | 2 | 3 | 4 | 5 | 6 |")
-        # print("---+---+---+---+---+---+---+")
-        # for i in range(0, 6):
-        #     print(f' {i+1} ', end='|')
-        #     for j in range(0, 6):
-        #         print(f' {self.board_[j].dot[0]} ', end='|')
-        #     print('\n---+---+---+---+---+---+---+')
         res = ""
         res += "    1  2  3  4  5  6"
-        # for i in range(0, 6):
-        #     res += f" {i + 1} "
-        #     for j in range(0, 6):
-        #         res += f" {self.board_[i][j]} "
-        #     res += "\n"
+
         for i, j in enumerate(self.board_):
             res += f"\n {i+1}  " + "  ".join(j)
         # Разобраться надо!!!
@@ -240,10 +229,10 @@ class Game:
         while True:
             print("-" * 20)
             print("Доска пользователя:")
-            print(self.us.board_player1)
+            print(self.us.board_player1.show())
             print("-" * 20)
             print("Доска компьютера:")
-            print(self.ai.board_player1)
+            print(self.ai.board_player1.show())
             print("-" * 20)
             if num % 2 == 0:
                 print("Ходит пользователь!")
@@ -272,6 +261,4 @@ class Game:
 
 # сама игра начинатся здесь
 game = Game()
-# game.start()
-game.size = 6
-print(game.random_board().show())
+game.start()
